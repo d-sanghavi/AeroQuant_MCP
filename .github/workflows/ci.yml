@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+# A queued run on the same branch is superseded by a newer push.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Typecheck, lint, test, build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    defaults:
+      run:
+        working-directory: client
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: client/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      # The acceptance criteria live here. If the constant-quality index stops
+      # recovering the trend the generator actually used, or the naive comparator
+      # stops diverging from it, this step fails and the claim the project makes is
+      # no longer true.
+      - name: Test
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+      # The prototype is fully client-side by design: no backend, no API keys, no
+      # runtime network request. That is a property worth enforcing rather than
+      # trusting, because it is the kind of thing a single convenient import undoes.
+      - name: Assert no runtime network calls
+        run: |
+          if grep -rnE "fetch\(['\"\`]https?://|axios\.|new XMLHttpRequest|new WebSocket\(" src/; then
+            echo "::error::A runtime network call was found in client/src. This prototype must run entirely offline."
+            exit 1
+          fi
+          echo "No runtime network calls in client/src."

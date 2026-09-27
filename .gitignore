@@ -1,0 +1,67 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build output
+dist/
+dist-ssr/
+build/
+*.local
+
+# Vercel
+.vercel/
+
+# Test and coverage output
+coverage/
+.nyc_output/
+*.lcov
+
+# Caches
+.cache/
+.parcel-cache/
+.eslintcache
+.stylelintcache
+*.tsbuildinfo
+.vite/
+
+# Environment. There are no secrets in this project - it is a fully client-side
+# prototype with no backend and no API keys - but an ignored .env is cheap insurance
+# against the first one that gets added.
+.env
+.env.*
+!.env.example
+
+# Editors
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Claude Code local state. The shared engineering context in .claude/ IS committed -
+# it is how the team's agents, skills and hooks stay in sync - but anything ending in
+# .local.json is per-developer and must not be.
+.claude/settings.local.json
+.claude/**/*.local.json

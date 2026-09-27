@@ -1,0 +1,182 @@
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/jetbrains-mono';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------------------------------------------------------------------------
+ * Design tokens - PROTOTYPE_SPEC section 6.
+ * Dark is the design target; light is a supported swap, not a second design.
+ * Values are space-separated RGB so Tailwind's <alpha-value> works.
+ * ------------------------------------------------------------------------ */
+@layer base {
+  :root,
+  .dark {
+    --aq-bg: 14 16 19;
+    --aq-surface: 21 24 29;
+    --aq-elevated: 26 30 36;
+    --aq-border: 36 41 50;
+    --aq-border-strong: 51 58 69;
+    --aq-text: 230 233 238;
+    --aq-muted: 154 164 178;
+    --aq-faint: 109 118 132;
+    --aq-accent: 78 205 180;
+    --aq-warning: 224 164 94;
+    --aq-negative: 224 106 94;
+    --aq-positive: 94 205 143;
+    --aq-grid: 36 41 50;
+  }
+
+  .light {
+    --aq-bg: 247 248 250;
+    --aq-surface: 255 255 255;
+    --aq-elevated: 255 255 255;
+    --aq-border: 224 227 232;
+    --aq-border-strong: 199 204 212;
+    --aq-text: 22 26 32;
+    --aq-muted: 91 100 113;
+    --aq-faint: 134 143 156;
+    --aq-accent: 20 148 125;
+    --aq-warning: 176 114 33;
+    --aq-negative: 191 63 51;
+    --aq-positive: 32 140 80;
+    --aq-grid: 229 232 237;
+  }
+
+  * {
+    @apply border-line;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-bg text-ink font-sans antialiased;
+    /* Numbers must never reflow while they animate. */
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'cv05' 1, 'ss01' 1;
+    text-rendering: optimizeLegibility;
+    -webkit-tap-highlight-color: transparent;
+    /* No horizontal page scroll at any width - acceptance criterion. */
+    overflow-x: hidden;
+    overscroll-behavior-y: none;
+  }
+
+  /* Every numeral in the product is monospaced with tabular figures. */
+  .num,
+  code,
+  kbd,
+  pre,
+  samp,
+  th,
+  td {
+    @apply font-mono;
+    font-variant-numeric: tabular-nums lining-nums;
+    font-feature-settings: 'tnum' 1, 'zero' 1;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-accent/70 ring-offset-1 ring-offset-bg;
+  }
+
+  ::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-line-strong;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-faint;
+  }
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+}
+
+@layer components {
+  /* The signature affordance: any number is a doorway to its provenance. */
+  .prov {
+    @apply cursor-pointer decoration-accent/50 decoration-[1px] underline-offset-[3px] transition-colors;
+    text-decoration-line: underline;
+    text-decoration-style: solid;
+    text-decoration-color: transparent;
+  }
+  .prov:hover,
+  .prov:focus-visible {
+    @apply text-accent;
+    text-decoration-color: rgb(var(--aq-accent) / 0.65);
+  }
+
+  .panel {
+    @apply rounded-md border border-line bg-surface shadow-panel;
+  }
+
+  /* Stacks below `sm`. A header with a segmented control in its actions cannot keep
+     both the title and the control on one line at 375px - something has to give, and
+     truncating the title to "D." is the worse of the two failures. */
+  .panel-header {
+    @apply flex flex-col items-start gap-2 border-b border-line px-3 py-2
+           sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:px-4;
+  }
+
+  .label-caps {
+    @apply text-2xs font-medium uppercase tracking-[0.09em] text-faint;
+  }
+
+  .skeleton {
+    @apply relative overflow-hidden rounded bg-elevated;
+  }
+  .skeleton::after {
+    content: '';
+    @apply absolute inset-0 -translate-x-full animate-shimmer;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgb(var(--aq-border-strong) / 0.45),
+      transparent
+    );
+  }
+
+  /* Hit targets must clear 44px on touch (PROTOTYPE_SPEC section 6). */
+  @media (pointer: coarse) {
+    .tap {
+      min-height: 44px;
+      min-width: 44px;
+    }
+  }
+}
+
+@layer utilities {
+  .safe-b {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .safe-t {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+}
+
+/* Reduced motion is honoured globally; Framer Motion is gated separately in code. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

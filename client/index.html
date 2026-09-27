@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#0E1013" />
+    <meta
+      name="description"
+      content="AeroQuant Terminal - airfare price index (APIx) research terminal for the Indian Statistical System. SIH 2026, SIH26056, MoSPI."
+    />
+    <title>AeroQuant Terminal</title>
+    <style>
+      /* Paint the terminal background before React mounts so there is no white flash. */
+      html { background: #0e1013; color-scheme: dark; }
+      html.light { background: #f7f8fa; color-scheme: light; }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

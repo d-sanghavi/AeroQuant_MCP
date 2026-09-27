@@ -1,0 +1,23 @@
+# Normalise to LF in the repository regardless of the platform a contributor is on.
+# Without this, a Windows checkout with core.autocrlf=true rewrites every line ending
+# and the next Linux contributor sees the whole tree as modified.
+* text=auto eol=lf
+
+# PowerShell hooks run on Windows and some older hosts are fussy about line endings.
+*.ps1 text eol=crlf
+
+# Binary - never touch these.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+*.pdf binary
+*.zip binary
+
+# Keep generated lockfiles and vendored data out of diff noise and language stats.
+client/package-lock.json linguist-generated=true -diff
